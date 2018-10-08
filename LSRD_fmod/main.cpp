@@ -753,7 +753,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 						Skill.Draw(mem1dc, skill.draw_x - skill.range_x*2, skill.draw_y - skill.range_y, 4 * skill.range_x, 2 * skill.range_y, 512, 256, 256, 256);
 						break;
 					}
-					*/
+					*/ 
 					break;
 				case 5:
 					Skill.AlphaBlend(mem1dc, skill.draw_x - skill.range_x, skill.draw_y - skill.range_y, 200, 200, 512, 0, 256, 256, 50);
@@ -1254,8 +1254,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 					mod.combine = 0;
 					mod.install = 0;
 					break;
+					//bbbbbb
 				case 'a':
-					if (timer.mission[0] >= 15000) {
+					if (timer.mission[0] >= 15000 && mod.breaktime != 1) {
 						add(&info.monster_num, &monster);
 						monster[info.monster_num - 1].x = map[0][0].x;
 						monster[info.monster_num - 1].y = map[0][0].y;
@@ -1275,7 +1276,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 					}
 					break;
 				case 's':
-					if (timer.mission[1] >= 15000) {
+					if (timer.mission[1] >= 15000 && mod.breaktime != 1) {
 						add(&info.monster_num, &monster);
 						monster[info.monster_num - 1].x = map[0][0].x;
 						monster[info.monster_num - 1].y = map[0][0].y;
@@ -1295,7 +1296,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 					}
 					break;
 				case 'd':
-					if (timer.mission[2] >= 15000) {
+					if (timer.mission[2] >= 15000 && mod.breaktime != 1) {
 						add(&info.monster_num, &monster);
 						monster[info.monster_num - 1].x = map[0][0].x;
 						monster[info.monster_num - 1].y = map[0][0].y;
@@ -2060,7 +2061,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 
 				if (mod.breaktime == 1) {
 					timer.breaktime++;
-					if (timer.breaktime > 100) {
+					if (timer.breaktime > 200) {
 						mod.breaktime = 0;
 						info.now_wave++;
 						if (info.now_wave % 10 == 0) {

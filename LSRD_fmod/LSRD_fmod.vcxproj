@@ -23,7 +23,7 @@
     <ProjectGuid>{BDC44F62-7BD0-464A-8B7D-86EBA87B278B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>LSRDfmod</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
