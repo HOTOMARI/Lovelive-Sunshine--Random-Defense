@@ -1857,7 +1857,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 				FMOD_System_CreateSound(soundSystem, "resource/sound/system/skill_slot_open.mp3", FMOD_DEFAULT, 0, &Effect_sound);
 				//맞출때, 몬스터 죽을때 소리
 				FMOD_System_CreateSound(soundSystem, "resource/sound/system/hit.wav", FMOD_DEFAULT, 0, &Hit_sound);
-				FMOD_System_CreateSound(soundSystem, "resource/sound/system/boom.wav", FMOD_DEFAULT, 0, &Boom_sound);
+				FMOD_System_CreateSound(soundSystem, "resource/sound/system/death1.wav", FMOD_DEFAULT, 0, &Boom_sound);
 
 				mod.mainmenu = false;
 				mod.gamemode = true;
@@ -1944,7 +1944,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 				info.combi_tower = 0;
 				// BBBBBBB
 				info.now_wave = 0;
-				info.money = 900;
+				info.money = 30;
 				info.count_mon = 0;
 				info.remain_life = 20;
 				info.gameover_alpha = 0;
@@ -2890,6 +2890,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 								monster[j] = monster[j + 1];
 							}
 							FMOD_Channel_Stop(Boom_sound_c);
+							FMOD_Sound_Release(Boom_sound);
+							switch (rand() % 3) {
+							case 0:
+								FMOD_System_CreateSound(soundSystem, "resource/sound/system/death1.wav", FMOD_DEFAULT, 0, &Boom_sound);
+								break;
+							case 1:
+								FMOD_System_CreateSound(soundSystem, "resource/sound/system/death2.wav", FMOD_DEFAULT, 0, &Boom_sound);
+								break;
+							case 2:
+								FMOD_System_CreateSound(soundSystem, "resource/sound/system/death3.wav", FMOD_DEFAULT, 0, &Boom_sound);
+								break;
+							}
 							FMOD_System_PlaySound(soundSystem, Boom_sound, NULL, false, &Boom_sound_c);
 							FMOD_Channel_SetVolume(Boom_sound_c, 0.8);
 							achievement(&map[0][0], &info, &achieve);
