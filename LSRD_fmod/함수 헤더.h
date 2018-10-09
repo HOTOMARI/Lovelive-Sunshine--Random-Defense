@@ -262,7 +262,6 @@ static unsigned int *sound_length;
 static unsigned int bgm_length;
 static double start, end;
 static int mission_status = 0;
-static unsigned int fuckingtimer = 0;
 
 // 채널 배분
 // 사운드 파일  bgm , 죽는소리

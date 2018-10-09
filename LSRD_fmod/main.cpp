@@ -81,6 +81,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 	float rad;
 	static int upgrade_status, upgrade_kind;
 	static char upgrade_message[25];
+	static char mission_message[25];
 
 	RECT bul, mob;
 
@@ -1178,14 +1179,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 			else if (upgrade_status == 2) {
 				TextOut(mem1dc, 300, 145 + 768, "Upgrade Fail", 12);
 			}
+			else if (upgrade_status == 3) {
+				TextOut(mem1dc, 300, 145 + 768, "Upgrade is Done!", 16);
+			}
 			if (mission_status == 1) {
-				TextOut(mem1dc, 300, 145 + 768, "Mission 1 activated", 19);
+				TextOut(mem1dc, 300, 133 + 768, "Mission 1 activated", 19);
 			}
 			else if (mission_status == 2) {
-				TextOut(mem1dc, 300, 145 + 768, "Mission 2 activated", 19);
+				TextOut(mem1dc, 300, 133 + 768, "Mission 2 activated", 19);
 			}
 			else if (mission_status == 3) {
-				TextOut(mem1dc, 300, 145 + 768, "Mission 3 activated", 19);
+				TextOut(mem1dc, 300, 133 + 768, "Mission 3 activated", 19);
+			}
+			else if (mission_status == 4) {
+				wsprintf(mission_message, "Not ready! - %d%%", int(timer.mission[0]/15000.0*100));
+				TextOut(mem1dc, 300, 133 + 768, mission_message, strlen(mission_message));
+			}
+			else if (mission_status == 5) {
+				wsprintf(mission_message, "Not ready! - %d%%", int(timer.mission[1] / 15000.0 * 100));
+				TextOut(mem1dc, 300, 133 + 768, mission_message, strlen(mission_message));
+			}
+			else if (mission_status == 6) {
+				wsprintf(mission_message, "Not ready! - %d%%", int(timer.mission[2] / 15000.0 * 100));
+				TextOut(mem1dc, 300, 133 + 768, mission_message, strlen(mission_message));
 			}
 
 			// 업그레이드 버튼
@@ -1272,7 +1288,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 						monster[info.monster_num - 1].mission = true;
 						timer.mission[0] = 0;
 						mission_status = 1;
-						SetTimer(child, 99, 3000, NULL);
+						SetTimer(hWnd, 99, 3000, NULL);
+					}
+					else {
+						mission_status = 4;
+						SetTimer(hWnd, 99, 3000, NULL);
 					}
 					break;
 				case 's':
@@ -1292,7 +1312,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 						monster[info.monster_num - 1].mission = true;
 						timer.mission[1] = 0;
 						mission_status = 2;
-						SetTimer(child, 99, 3000, NULL);
+						SetTimer(hWnd, 99, 3000, NULL);
+					}
+					else {
+						mission_status = 5;
+						SetTimer(hWnd, 99, 3000, NULL);
 					}
 					break;
 				case 'd':
@@ -1312,7 +1336,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 						monster[info.monster_num - 1].mission = true;
 						timer.mission[2] = 0;
 						mission_status = 3;
-						SetTimer(child, 99, 3000, NULL);
+						SetTimer(hWnd, 99, 3000, NULL);
+					}
+					else {
+						mission_status = 6;
+						SetTimer(hWnd, 99, 3000, NULL);
 					}
 					break;
 				}
@@ -1706,7 +1734,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 						upgrade_status = 1;
 						info.upgrade_stack[i]++;
 						upgrade_kind = i;
-						SetTimer(hWnd, 99, 3000, NULL);
+						SetTimer(hWnd, 98, 3000, NULL);
 						FMOD_Channel_Stop(Effect_sound_c);
 						FMOD_Sound_Release(Effect_sound);
 						FMOD_System_CreateSound(soundSystem, "resource/sound/system/up_success.ogg", FMOD_DEFAULT, 0, &Effect_sound);
@@ -1715,12 +1743,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 					//실패
 					else {
 						upgrade_status = 2;
-						SetTimer(hWnd, 99, 3000, NULL);
+						SetTimer(hWnd, 98, 3000, NULL);
 						FMOD_Channel_Stop(Effect_sound_c);
 						FMOD_Sound_Release(Effect_sound);
 						FMOD_System_CreateSound(soundSystem, "resource/sound/system/up_fail.ogg", FMOD_DEFAULT, 0, &Effect_sound);
 						FMOD_System_PlaySound(soundSystem, Effect_sound, NULL, false, &Effect_sound_c);
 					}
+				}
+				else if (buttons[i].on_mouse&&info.upgrade[i] > 3.00) {
+					upgrade_status = 3;
+					SetTimer(hWnd, 98, 3000, NULL);
+					FMOD_Channel_Stop(Effect_sound_c);
+					FMOD_Sound_Release(Effect_sound);
+					FMOD_System_CreateSound(soundSystem, "resource/sound/system/up_fail.ogg", FMOD_DEFAULT, 0, &Effect_sound);
+					FMOD_System_PlaySound(soundSystem, Effect_sound, NULL, false, &Effect_sound_c);
 				}
 				achievement(&map[0][0], &info, &achieve);
 			}
@@ -1908,7 +1944,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 				info.combi_tower = 0;
 				// BBBBBBB
 				info.now_wave = 0;
-				info.money = 30;
+				info.money = 900;
 				info.count_mon = 0;
 				info.remain_life = 20;
 				info.gameover_alpha = 0;
@@ -1995,10 +2031,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT IMsg, WPARAM wParam, LPARAM lParam)
 
 	case WM_TIMER:
 		switch(wParam){
+		case 98:
+			upgrade_status = 0;
+			KillTimer(hWnd, 98);
+			break;
 		case 99:
 			mission_status = 0;
-			upgrade_status = 0;
-
 			KillTimer(hWnd, 99);
 			break;
 		case 1:
